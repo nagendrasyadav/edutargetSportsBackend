@@ -1,6 +1,6 @@
 package com.edutarget.edutargetSports.controller;
 import com.edutarget.edutargetSports.dto.LoginRequest;
-import com.edutarget.edutargetSports.entity.User;
+import com.edutarget.edutargetSports.entity.UserRegistration;
 import com.edutarget.edutargetSports.repository.UserRepository;
 import com.edutarget.edutargetSports.security.JwtTokenProvider;
 import com.edutarget.edutargetSports.security.TokenBlacklistService;
@@ -40,13 +40,13 @@ public class AuthController {
 
         UserDetails userDetails = (UserDetails) authentication.getPrincipal();
         // fetch role from DB to embed in token
-        User user = userRepository.findByUniqueId(userDetails.getUsername())
+        UserRegistration userRegistration = userRepository.findByUniqueId(userDetails.getUsername())
                 .orElseThrow();
 
-        String token = tokenProvider.createToken(user.getUniqueId(), user.getRole().name());
+        String token = tokenProvider.createToken(userRegistration.getUniqueId(), userRegistration.getRole().name());
 
-        logger.info("User [{}] logged in", user.getUniqueId());
-        return ResponseEntity.ok(new TokenResponse(token, "Bearer", user.getRole().name()));
+        logger.info("User [{}] logged in", userRegistration.getUniqueId());
+        return ResponseEntity.ok(new TokenResponse(token, "Bearer", userRegistration.getRole().name()));
     }
 
     @PostMapping("/logout")

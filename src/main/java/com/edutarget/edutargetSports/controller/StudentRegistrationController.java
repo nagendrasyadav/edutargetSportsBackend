@@ -1,6 +1,7 @@
 package com.edutarget.edutargetSports.controller;
 
 import com.edutarget.edutargetSports.dto.*;
+import com.edutarget.edutargetSports.entity.UserStatus;
 import com.edutarget.edutargetSports.exception.ResourceNotFoundException;
 import com.edutarget.edutargetSports.exception.UserInactiveException;
 import com.edutarget.edutargetSports.entity.AppUser;
@@ -37,7 +38,7 @@ public class StudentRegistrationController {
         String loggedInUser = (String) httpRequest.getAttribute("loggedInUser");
         AppUser appUser = appUserRepository.findByUniqueId(loggedInUser)
                 .orElseThrow(() -> new ResourceNotFoundException("Logged in user not found"));
-        if(!appUser.isActive()){
+        if(appUser.getUserStatus().equals(UserStatus.SUSPENDED)){
             throw new UserInactiveException("User is not active");
         }
         return ResponseEntity.status(HttpStatus.CREATED).body(studentRegistrationService.create(req, appUser));
@@ -49,7 +50,7 @@ public class StudentRegistrationController {
         String loggedInUser = (String) httpRequest.getAttribute("loggedInUser");
         AppUser appUser = appUserRepository.findByUniqueId(loggedInUser)
                 .orElseThrow(() -> new ResourceNotFoundException("Logged in user not found"));
-        if(!appUser.isActive()){
+        if(appUser.getUserStatus().equals(UserStatus.SUSPENDED)){
             throw new UserInactiveException("User is not active");
         }
         log.debug("HTTP GET /api/registrations/{}", id);
@@ -69,7 +70,7 @@ public class StudentRegistrationController {
         String loggedInUser = (String) httpRequest.getAttribute("loggedInUser");
         AppUser appUser = appUserRepository.findByUniqueId(loggedInUser)
                 .orElseThrow(() -> new ResourceNotFoundException("Logged in user not found"));
-        if(!appUser.isActive()){
+        if(appUser.getUserStatus().equals(UserStatus.SUSPENDED)){
             throw new UserInactiveException("User is not active");
         }
         log.debug("HTTP GET /api/registrations (list) called");
@@ -85,7 +86,7 @@ public class StudentRegistrationController {
         String loggedInUser = (String) httpRequest.getAttribute("loggedInUser");
         AppUser appUser = appUserRepository.findByUniqueId(loggedInUser)
                 .orElseThrow(() -> new ResourceNotFoundException("Logged in user not found"));
-        if(!appUser.isActive()){
+        if(appUser.getUserStatus().equals(UserStatus.SUSPENDED)){
             throw new UserInactiveException("User is not active");
         }
         log.debug("HTTP PUT /api/registrations/{} payload received", id);
@@ -98,7 +99,7 @@ public class StudentRegistrationController {
         String loggedInUser = (String) httpRequest.getAttribute("loggedInUser");
         AppUser appUser = appUserRepository.findByUniqueId(loggedInUser)
                 .orElseThrow(() -> new ResourceNotFoundException("Logged in user not found"));
-        if(!appUser.isActive()){
+        if(appUser.getUserStatus().equals(UserStatus.SUSPENDED)){
             throw new UserInactiveException("User is not active");
         }
         log.debug("HTTP DELETE /api/registrations/{}", id);

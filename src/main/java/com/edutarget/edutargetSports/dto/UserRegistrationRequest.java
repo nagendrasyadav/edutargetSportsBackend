@@ -9,6 +9,7 @@ import lombok.*;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
+@Data
 public class UserRegistrationRequest {
 
     private String uniqueId;
@@ -30,6 +31,7 @@ public class UserRegistrationRequest {
     @NotBlank(message = "Role is required")
     private String role; // USER or ADMIN (POWER_ADMIN cannot be created via API)
 
-    private Boolean active;
+    @NotBlank(message = "User Status is required")
+    private String userStatus;
 
 }

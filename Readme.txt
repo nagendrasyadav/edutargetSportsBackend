@@ -3,7 +3,7 @@ EduTarget Sports - User Management REST API
 ===========================================================
 
 This is a Spring Boot application (Java 17) that provides a
-secure REST API for user registration and management. The
+secure REST API for userRegistration registration and management. The
 application follows SOLID principles, uses JWT for security,
 and MySQL as the database.
 
@@ -18,10 +18,10 @@ FEATURES
    - POWER_ADMIN can only be inserted directly into DB.
 
 2. User Management (CRUD)
-   - Update user details (name, role, password [optional]).
+   - Update userRegistration details (name, role, password [optional]).
    - Activate/Inactivate users instead of deleting them.
-   - Delete user (hard delete - only POWER_ADMIN).
-   - Get user by uniqueId.
+   - Delete userRegistration (hard delete - only POWER_ADMIN).
+   - Get userRegistration by uniqueId.
    - Get all users.
 
 3. Security
@@ -35,7 +35,7 @@ FEATURES
    - Strong password policy enforced.
    - Bean Validation for request payloads.
    - Centralized GlobalExceptionHandler for consistent error responses.
-   - Logging (SLF4J + Logback) includes user performing the action.
+   - Logging (SLF4J + Logback) includes userRegistration performing the action.
 
 5. CORS
    - Enabled to allow access from any client application.
@@ -85,13 +85,13 @@ POST /api/auth/login
 
 User Management (requires POWER_ADMIN token):
 ---------------------------------------------
-POST   /api/users        -> Register a new user
-GET    /api/users/{id}   -> Get user by uniqueId
+POST   /api/users        -> Register a new userRegistration
+GET    /api/users/{id}   -> Get userRegistration by uniqueId
 GET    /api/users        -> Get all users
-PUT    /api/users/{id}   -> Update user details
-DELETE /api/users/{id}   -> Delete user
-PATCH  /api/users/{id}/activate   -> Activate user
-PATCH  /api/users/{id}/inactivate -> Inactivate user
+PUT    /api/users/{id}   -> Update userRegistration details
+DELETE /api/users/{id}   -> Delete userRegistration
+PATCH  /api/users/{id}/activate   -> Activate userRegistration
+PATCH  /api/users/{id}/inactivate -> Inactivate userRegistration
 
 -----------------------------------------------------------
 ERROR HANDLING
@@ -107,7 +107,7 @@ NOTES
 -----------------------------------------------------------
 - Password is never returned in API responses (always null).
 - Names are automatically capitalized (e.g., "nagendra yadav" -> "Nagendra Yadav").
-- Each user has a "userDisplayed" field in response: [ETU1]-Nagendra Yadav
-- All actions are logged with user ID and name.
+- Each userRegistration has a "userDisplayed" field in response: [ETU1]-Nagendra Yadav
+- All actions are logged with userRegistration ID and name.
 
 ===========================================================

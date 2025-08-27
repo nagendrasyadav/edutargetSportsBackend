@@ -7,13 +7,13 @@ import jakarta.validation.constraints.Pattern;
 import lombok.*;
 
 @Entity
-@Table(name = "users", uniqueConstraints = @UniqueConstraint(columnNames = "uniqueId"))
+@Table(name = "user_registration", uniqueConstraints = @UniqueConstraint(columnNames = "uniqueId"))
 @Getter
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class User {
+public class UserRegistration {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -37,7 +37,8 @@ public class User {
     @Column(nullable = false)
     private String password;
 
+    @Enumerated(EnumType.STRING)
     @Column(nullable = false)
-    private boolean active = true;
+    private UserStatus userStatus;
 }
 

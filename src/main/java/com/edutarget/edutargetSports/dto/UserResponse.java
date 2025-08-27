@@ -11,6 +11,6 @@ public class UserResponse {
     private String uniqueId;
     private String name;
     private String role;
-    private Boolean active;
+    private String userStatus;
     private String userDisplay;
 }
