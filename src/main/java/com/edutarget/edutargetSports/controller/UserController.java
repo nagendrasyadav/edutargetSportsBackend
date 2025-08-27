@@ -62,7 +62,7 @@ public class UserController {
     public ResponseEntity<UserResponse> getUser(@PathVariable String uniqueId, HttpServletRequest request) throws Exception {
         String loggedInUserId = (String) request.getAttribute("loggedInUser");
         AppUser appUser = appUserRepository.findByUniqueId(loggedInUserId)
-                .orElseThrow(() -> new ResourceNotFoundException("Logged in user not found"));
+                .orElseThrow(() -> new ResourceNotFoundException("Logged in user not found..!"));
         if(appUser.getUserStatus().equals(UserStatus.SUSPENDED)){
             throw new UserInactiveException("User is not active");
         }
