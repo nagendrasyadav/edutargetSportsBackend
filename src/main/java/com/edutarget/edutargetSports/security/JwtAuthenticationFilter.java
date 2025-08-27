@@ -21,6 +21,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
     private final JwtTokenProvider tokenProvider;
     private final CustomUserDetailsService userDetailsService;
+    private final TokenBlacklistService tokenBlacklistService;
 
 
     @Override
@@ -29,16 +30,26 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
                                     FilterChain filterChain) throws IOException, jakarta.servlet.ServletException {
         try {
             String token = resolveToken(request);
-            if (StringUtils.hasText(token) && tokenProvider.validateToken(token)) {
-                String uniqueId = tokenProvider.getUniqueId(token);
-                UserDetails userDetails = userDetailsService.loadUserByUsername(uniqueId);
+            if (StringUtils.hasText(token)) {
+                //  deny if token is blacklisted (logged out)
+                if (tokenBlacklistService.isBlacklisted(token)) {
+                    logger.warn("Rejected blacklisted token");
+                    setErrorResponse(response, HttpStatus.UNAUTHORIZED, "Session ended. Please login again.");
+                    return;
+                }
 
-                UsernamePasswordAuthenticationToken auth = new UsernamePasswordAuthenticationToken(
-                        userDetails, null, userDetails.getAuthorities());
-                SecurityContextHolder.getContext().setAuthentication(auth);
+                // validate token and authenticate
+                if (tokenProvider.validateToken(token)) {
+                    String uniqueId = tokenProvider.getUniqueId(token);
+                    UserDetails userDetails = userDetailsService.loadUserByUsername(uniqueId);
 
-                // make uniqueId available to controllers for logging/actions
-                request.setAttribute("loggedInUser", uniqueId);
+                    UsernamePasswordAuthenticationToken auth =
+                            new UsernamePasswordAuthenticationToken(userDetails, null, userDetails.getAuthorities());
+                    SecurityContextHolder.getContext().setAuthentication(auth);
+
+                    // make uniqueId available to controllers for logging/actions
+                    request.setAttribute("loggedInUser", uniqueId);
+                }
             }
         } catch (JwtTokenExpiredException ex) {
             logger.error("JWT expired: {}", ex.getMessage());
@@ -71,6 +82,6 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
         response.setStatus(status.value());
         response.setContentType("application/json");
         response.setCharacterEncoding("UTF-8");
-        response.getWriter().write("{\"error\": \"" + message + "\"}");
+        response.getWriter().write("{\"status\":"+status.value()+",\"error\":\""+message+"\"}");
     }
 }

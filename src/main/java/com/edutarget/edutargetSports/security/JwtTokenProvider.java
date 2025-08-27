@@ -10,6 +10,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
 import java.security.Key;
+import java.time.Instant;
 import java.util.Date;
 
 @Component
@@ -61,6 +62,26 @@ public class JwtTokenProvider {
         Claims claims = Jwts.parserBuilder().setSigningKey(key).build().parseClaimsJws(token).getBody();
         Object role = claims.get("role");
         return role != null ? role.toString() : null;
+    }
+
+    public Instant getExpiry(String token) {
+        try {
+            Date exp = getAllClaims(token).getExpiration();
+            return exp != null ? exp.toInstant() : null;
+        } catch (ExpiredJwtException ex) {
+            // Even if expired, we treat as expired immediately
+            throw new JwtTokenExpiredException("Session expired. Please login again.");
+        } catch (JwtException | IllegalArgumentException ex) {
+            throw new JwtTokenInvalidException("Invalid JWT token. Please login again.");
+        }
+    }
+
+    private Claims getAllClaims(String token) {
+        return Jwts.parserBuilder()
+                .setSigningKey(key)
+                .build()
+                .parseClaimsJws(token)
+                .getBody();
     }
 }
 

@@ -26,6 +26,7 @@ public class SecurityConfig {
 
     private final CustomUserDetailsService customUserDetailsService;
     private final JwtTokenProvider jwtTokenProvider;
+    private final TokenBlacklistService blacklist;
 
     @Bean
     public AuthenticationManager authenticationManager(AuthenticationConfiguration config) throws Exception {
@@ -39,7 +40,7 @@ public class SecurityConfig {
 
     @Bean
     public JwtAuthenticationFilter jwtAuthenticationFilter() {
-        return new JwtAuthenticationFilter(jwtTokenProvider, customUserDetailsService);
+        return new JwtAuthenticationFilter(jwtTokenProvider, customUserDetailsService,blacklist);
     }
 
     @Bean
