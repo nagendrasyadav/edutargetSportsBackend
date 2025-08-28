@@ -61,6 +61,14 @@ public class StudentRegistrationService {
         return StudentRegistrationMapper.toResponse(e);
     }
 
+    @Transactional(readOnly = true)
+    public StudentRegistrationResponse getByStudentId(Long id) {
+        log.info("GET byId by={} id={}", "DUMMY", id);
+
+        var e = getEntity(id);
+        return StudentRegistrationMapper.toResponse(e);
+    }
+
 
     @Transactional(readOnly = true)
     public Page<StudentRegistrationResponse> list(Pageable pageable, StudentRegistrationFilter filter,AppUser appUser) {
