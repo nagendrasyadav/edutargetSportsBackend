@@ -14,7 +14,7 @@ public class UserApiScheduler {
     private final RestTemplate restTemplate = new RestTemplate();
 
     // ✅ Runs every 14 minutes
-    @Scheduled(cron = "0 */2 * * * *")
+    @Scheduled(cron = "0 */13 * * * *")
     public void hitApi() {
         String url = "https://edutargetsportsbackend.onrender.com/api/studentRegistrations/1";
 
@@ -26,6 +26,7 @@ public class UserApiScheduler {
 
         log.info("Scheduler hit API. Response status: {}, body length={}",
                 response.getStatusCode(), response.getBody() != null ? response.getBody().length() : 0);
+        log.info("<<---------------Response Body----------->>: {}", response.getBody());
 
     }
 }
