@@ -14,18 +14,19 @@ public class UserApiScheduler {
     private final RestTemplate restTemplate = new RestTemplate();
 
     // ✅ Runs every 14 minutes
-    @Scheduled(cron = "0 */2 * * * *")
+    @Scheduled(cron = "0 */13 * * * *")
     public void hitApi() {
-        String url = "http://localhost:8080/api/studentRegistrations/1";
+        String url = "https://edutargetsportsbackend.onrender.com/api/studentRegistrations/1";
 
         HttpHeaders headers = new HttpHeaders();
-        headers.set("Authorization", "Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJEVU1NWSIsInJvbGUiOiJVU0VSIiwiaWF0IjoxNzU2Mzk5Nzg2LCJleHAiOjE3NTY0MDMzODZ9.R774mRA_1CH_PtaVpyT-whmXW6Y9rzKbiftTukxwlNo");
+        headers.set("Authorization", "Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJEVU1NWSIsInJvbGUiOiJVU0VSIiwiaWF0IjoxNzU2NDAwODMyLCJleHAiOjE3NTcyNjQ4MzJ9.2ltVPME1eNu1RexyLgMz6jtuD_1_Lp1-wL2JU8D0jlE");
         HttpEntity<Void> entity = new HttpEntity<>(headers);
 
         ResponseEntity<String> response = restTemplate.exchange(url, HttpMethod.GET, entity, String.class);
 
         log.info("Scheduler hit API. Response status: {}, body length={}",
                 response.getStatusCode(), response.getBody() != null ? response.getBody().length() : 0);
+        log.info("<<---------------Response Body----------->>: {}", response.getBody());
 
     }
 }
