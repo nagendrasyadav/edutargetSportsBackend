@@ -44,9 +44,10 @@ public class AuthController {
                 .orElseThrow();
 
         String token = tokenProvider.createToken(userRegistration.getUniqueId(), userRegistration.getRole().name());
+        String user=userRegistration.getName();
 
         logger.info("User [{}] logged in", userRegistration.getUniqueId());
-        return ResponseEntity.ok(new TokenResponse(token, "Bearer", userRegistration.getRole().name()));
+        return ResponseEntity.ok(new TokenResponse(token, "Bearer", userRegistration.getRole().name(),user));
     }
 
     @PostMapping("/logout")
@@ -85,7 +86,7 @@ public class AuthController {
     }
 
     // DTO response inner class or separate file
-    public record TokenResponse(String token, String tokenType, String role) {}
+    public record TokenResponse(String token, String tokenType, String role,String user) {}
 
 
 }
